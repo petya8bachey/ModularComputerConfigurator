@@ -35,6 +35,6 @@ public class Component implements ComponentInterface {
 
     @Override
     public String toString() {
-        return "component manufacturer='%s' model='%s'".formatted(manufacturer, model);
+        return "manufacturer='%s' model='%s'".formatted(manufacturer, model);
     }
 }

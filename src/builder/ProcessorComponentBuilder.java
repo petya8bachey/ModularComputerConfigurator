@@ -5,8 +5,10 @@ import decorator.SocketDecorator;
 import decorator.TypeDecorator;
 
 public class ProcessorComponentBuilder extends ComponentBuilderAbstract {
-     public ComponentBuilderInterface setSocket(String socket) {
-        component = new SocketDecorator(component, socket);
+    String socket;
+
+     public ProcessorComponentBuilder setSocket(String socket) {
+        this.socket = socket;
         return this;
     }
 
@@ -14,5 +16,11 @@ public class ProcessorComponentBuilder extends ComponentBuilderAbstract {
     public ProcessorComponentBuilder setComponent(ComponentInterface component) {
         this.component = new TypeDecorator(component, "processor");
         return this;
+    }
+
+    @Override
+    public ComponentInterface build() {
+         component = new SocketDecorator(component, socket);
+         return component;
     }
 }

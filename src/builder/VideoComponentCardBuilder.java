@@ -4,24 +4,31 @@ import component.ComponentInterface;
 import decorator.SizeDecorator;
 import decorator.FrequencyDecorator;
 import decorator.TypeDecorator;
+import decorator.PowerDecorator;
 
-public class MemoryComponentBuilder extends ComponentBuilderAbstract {
+public class VideoComponentCardBuilder extends ComponentBuilderAbstract {
     private int memorySize;
     private int frequency;
+    private int power;
 
-    public MemoryComponentBuilder setMemorySize(int memorySize) {
+    public VideoComponentCardBuilder setMemorySize(int memorySize) {
         this.memorySize = memorySize;
         return this;
     }
 
-    public MemoryComponentBuilder setFrequency(int frequency) {
+    public VideoComponentCardBuilder setFrequency(int frequency) {
         this.frequency = frequency;
         return this;
     }
 
+    public VideoComponentCardBuilder setPower(int power) {
+        this.power = power;
+        return this;
+    }
+
     @Override
-    public MemoryComponentBuilder setComponent(ComponentInterface component) {
-        this.component = new TypeDecorator(component, "memory");
+    public VideoComponentCardBuilder setComponent(ComponentInterface component) {
+        this.component = new TypeDecorator(component, "video card");
         return this;
     }
 
@@ -29,6 +36,7 @@ public class MemoryComponentBuilder extends ComponentBuilderAbstract {
     public ComponentInterface build() {
         component = new SizeDecorator(component, memorySize);
         component = new FrequencyDecorator(component, frequency);
+        component = new PowerDecorator(component, power);
         return component;
     }
 }

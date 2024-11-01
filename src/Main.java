@@ -1,6 +1,5 @@
-import builder.MemoryComponentBuilder;
-import builder.MotherboardComponentBuilder;
-import builder.ProcessorComponentBuilder;
+import builder.*;
+import checker.PowerChecker;
 import checker.SocketChecker;
 import component.Component;
 import component.ComponentInterface;
@@ -33,14 +32,43 @@ public class Main {
                 .setFrequency(3200)
                 .build();
 
+        ComponentInterface videoCard = new VideoComponentCardBuilder()
+                .setComponent(new Component("RTX 3080", "NVIDIA"))
+                .setMemorySize(10240)
+                .setFrequency(1750)
+                .setPower(320)
+                .build();
+
+        StorageComponentBuilder storageBuilder = new StorageComponentBuilder();
+        ComponentInterface storage = storageBuilder
+                .setComponent(new Component("970 EVO", "Samsung"))
+                .setStorageSize(1000)
+                .setStorageType("SSD")
+                .build();
+
+        PowerSupplyComponentBuilder powerSupplyBuilder = new PowerSupplyComponentBuilder();
+        ComponentInterface powerSupply = powerSupplyBuilder
+                .setComponent(new Component("Supernova 850 G5", "EVGA"))
+                .setWattage(850)
+                .build();
 
         System.out.println(cpu);
         System.out.println(motherboard);
         System.out.println(ram);
+        System.out.println(videoCard);
+        System.out.println(storage);
+        System.out.println(powerSupply);
 
         List<ComponentInterface> components = new ArrayList<>();
         components.add(cpu);
         components.add(motherboard);
+        components.add(ram);
+        components.add(videoCard);
+        components.add(storage);
+        components.add(powerSupply);
+        components.add(storage);
+        components.add(powerSupply);
         System.out.println(new SocketChecker().checkCompatibility(components));
+        System.out.println(new PowerChecker().checkCompatibility(components));
     }
 }

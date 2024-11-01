@@ -12,6 +12,6 @@ public class TypeDecorator extends ComponentDecorator {
 
     @Override
     public String toString() {
-        return "%s type='%s'".formatted(component.toString(), type);
+        return "%s component type='%s'".formatted(component.toString(), type);
     }
 }
