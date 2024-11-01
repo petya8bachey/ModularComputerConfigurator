@@ -1,5 +1,5 @@
 import builder.*;
-import checker.PowerChecker;
+import checker.*;
 import checker.SocketChecker;
 import component.Component;
 import component.ComponentInterface;
@@ -67,8 +67,12 @@ public class Main {
         components.add(storage);
         components.add(powerSupply);
         components.add(storage);
-        components.add(powerSupply);
-        System.out.println(new SocketChecker().checkCompatibility(components));
-        System.out.println(new PowerChecker().checkCompatibility(components));
+
+        CompatibilityCheckerInterface powerChecker = new PowerChecker();
+        CompatibilityCheckerInterface socketChecker = new SocketChecker();
+
+        powerChecker.setNextChecker(socketChecker);
+
+        System.out.println(powerChecker.checkCompatibility(components));
     }
 }

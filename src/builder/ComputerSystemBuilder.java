@@ -3,25 +3,38 @@ package builder;
 import component.ComponentInterface;
 import component.ComputerSystem;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Управляет процессом сборки системы из компонентов
  * @author petya8bachey
  * @version 1.0
  */
 public class ComputerSystemBuilder {
-    List<ComponentInterface> components = new ArrayList<>();
-    public ComputerSystemBuilder() {
+    ComputerSystemComponent body;
+    ComputerSystemComponent motherboard;
+
+    public ComputerSystemBuilder() {}
+
+    public ComputerSystemBuilder setBody(ComponentInterface body) {
+        this.body = new ComputerSystemComponent(body);
+        return this;
+    }
+
+    public ComputerSystemBuilder setMotherboard(ComponentInterface motherboard) {
+        this.motherboard = new ComputerSystemComponent(motherboard);
+        return this;
+    }
+
+    public ComputerSystemBuilder addComponentToBody(ComponentInterface component) {
+        body.addComponent(component);
+        return this;
+    }
+
+    public ComputerSystemBuilder addComponentToMotherboard(ComponentInterface component) {
+        motherboard.addComponent(component);
+        return this;
     }
 
     public ComputerSystem build() {
         return new ComputerSystem(this);
-    }
-
-    public ComputerSystemBuilder addComponent(ComponentInterface component) {
-        components.add(component);
-        return this;
     }
 }

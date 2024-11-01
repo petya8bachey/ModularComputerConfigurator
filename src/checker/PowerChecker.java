@@ -7,7 +7,7 @@ import java.util.List;
 public class PowerChecker extends CompatibilityCheckerAbstract {
 
     @Override
-    public String checkCompatibility(List<ComponentInterface> components) {
+    protected String performCheck(List<ComponentInterface> components) {
         int totalPowerConsumption = 0;
         int powerSupplyWattage = 0;
 
@@ -36,6 +36,7 @@ public class PowerChecker extends CompatibilityCheckerAbstract {
                     .formatted(powerSupplyWattage, totalPowerConsumption);
         }
     }
+
 
     private int extractPower(String componentString) {
         int startIndex = componentString.indexOf("power='") + "power='".length();

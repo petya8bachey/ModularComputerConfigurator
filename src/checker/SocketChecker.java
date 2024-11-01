@@ -7,7 +7,7 @@ import java.util.List;
 public class SocketChecker extends CompatibilityCheckerAbstract {
 
     @Override
-    public String checkCompatibility(List<ComponentInterface> components) {
+    protected String performCheck(List<ComponentInterface> components) {
         String motherboardSocket = null;
         String processorSocket = null;
 
@@ -31,8 +31,8 @@ public class SocketChecker extends CompatibilityCheckerAbstract {
         } else {
             return "Error: unable to determine processor and/or motherboard socket";
         }
-
     }
+
 
     private String extractSocket(String componentString) {
         int startIndex = componentString.indexOf("socket='") + "socket='".length();
