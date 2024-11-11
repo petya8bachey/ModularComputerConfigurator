@@ -3,6 +3,7 @@ package builder;
 import component.ComponentInterface;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class ComputerSystemComponent {
@@ -17,10 +18,16 @@ public class ComputerSystemComponent {
         if (components == null) {
             components = new ArrayList<>();
         }
-        components.add(new ComputerSystemComponent(component));
+        ComputerSystemComponent systemComponent = new ComputerSystemComponent();
+        systemComponent.setComponent(component);
+        components.add(systemComponent);
     }
-
-    public ComputerSystemComponent(ComponentInterface component) {
+    public void setComponent(ComponentInterface component) {
         thisComponent = component;
+    }
+    public ComputerSystemComponent() {}
+
+    public ComponentInterface getThisComponent() {
+        return thisComponent;
     }
 }

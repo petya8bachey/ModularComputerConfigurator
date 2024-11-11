@@ -21,7 +21,7 @@ public class StorageComponentBuilder extends ComponentBuilderAbstract {
 
     @Override
     public StorageComponentBuilder setComponent(ComponentInterface component) {
-        this.component = new TypeDecorator(component, storageType);
+        this.component = new TypeDecorator(component, "storage");
         return this;
     }
 

@@ -1,11 +1,7 @@
 import builder.*;
-import checker.*;
-import checker.SocketChecker;
 import component.Component;
 import component.ComponentInterface;
-
-import java.util.ArrayList;
-import java.util.List;
+import component.ComputerSystem;
 
 /**
  * Основной класс
@@ -14,65 +10,62 @@ import java.util.List;
  */
 public class Main {
     public static void main(String[] args) {
-        ProcessorComponentBuilder processorBuilder = new ProcessorComponentBuilder();
-        ComponentInterface cpu = processorBuilder.setComponent(new Component("5600", "AMD"))
+        ComputerSystemBuilder builder = new ComputerSystemBuilder();
+
+        ComponentInterface body = new BodyComponentBuilder()
+                .setComponent(new Component("DC-202M", "DEXP"))
+                .setFormFactor("ATX")
+                .build();
+
+        ComponentInterface cpu = new ProcessorComponentBuilder()
+                .setComponent(new Component("5600", "AMD"))
                 .setSocket("AM4")
                 .build();
 
-        MotherboardComponentBuilder motherboardBuilder = new MotherboardComponentBuilder();
-        ComponentInterface motherboard = motherboardBuilder
+        ComponentInterface motherboard = BuilderFactory.getMotherboardComponentBuilder()
                 .setComponent(new Component("B450", "ASUS"))
                 .setSocket("AM4")
+                .setFormFactor("ATX")
                 .build();
 
-        MemoryComponentBuilder memoryBuilder = new MemoryComponentBuilder();
-        ComponentInterface ram = memoryBuilder
+        ComponentInterface ram = BuilderFactory.getMemoryComponentBuilder()
                 .setComponent(new Component("Vengeance", "Corsair"))
                 .setMemorySize(8192)
                 .setFrequency(3200)
                 .build();
 
-        ComponentInterface videoCard = new VideoComponentCardBuilder()
+        ComponentInterface videoCard = BuilderFactory.getVideoCardComponentBuilder()
                 .setComponent(new Component("RTX 3080", "NVIDIA"))
                 .setMemorySize(10240)
                 .setFrequency(1750)
                 .setPower(320)
                 .build();
 
-        StorageComponentBuilder storageBuilder = new StorageComponentBuilder();
-        ComponentInterface storage = storageBuilder
+        ComponentInterface storage = BuilderFactory.getStorageComponentBuilder()
                 .setComponent(new Component("970 EVO", "Samsung"))
                 .setStorageSize(1000)
                 .setStorageType("SSD")
                 .build();
 
-        PowerSupplyComponentBuilder powerSupplyBuilder = new PowerSupplyComponentBuilder();
-        ComponentInterface powerSupply = powerSupplyBuilder
+        ComponentInterface powerSupply = BuilderFactory.getPowerSupplyComponentBuilder()
                 .setComponent(new Component("Supernova 850 G5", "EVGA"))
                 .setWattage(850)
                 .build();
 
-        System.out.println(cpu);
-        System.out.println(motherboard);
-        System.out.println(ram);
-        System.out.println(videoCard);
-        System.out.println(storage);
-        System.out.println(powerSupply);
+        builder.setBody(body)
+                .setMotherboard(motherboard)
+                .addComponentToMotherboard(cpu)
+                .addComponentToMotherboard(ram)
+                .addComponentToMotherboard(videoCard)
+                .addComponentToMotherboard(storage)
+                .addComponentToMotherboard(powerSupply);
 
-        List<ComponentInterface> components = new ArrayList<>();
-        components.add(cpu);
-        components.add(motherboard);
-        components.add(ram);
-        components.add(videoCard);
-        components.add(storage);
-        components.add(powerSupply);
-        components.add(storage);
+        ComputerSystem computerSystem = builder.build();
 
-        CompatibilityCheckerInterface powerChecker = new PowerChecker();
-        CompatibilityCheckerInterface socketChecker = new SocketChecker();
+        for (ComponentInterface component : computerSystem.getComponents()) {
+            System.out.println(component);
+        }
 
-        powerChecker.setNextChecker(socketChecker);
-
-        System.out.println(powerChecker.checkCompatibility(components));
+        System.out.println(computerSystem.check());
     }
 }
