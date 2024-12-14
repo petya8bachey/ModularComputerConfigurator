@@ -1,17 +1,22 @@
 package com.petya8bachey.modular_computer_configurator;
 
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @SpringBootApplication
 public class ModularComputerConfiguratorApplication implements CommandLineRunner {
 
     @Autowired
     private ConfigurationService configurationService;
+    @Autowired
+    private ComponentAdder componentAdder;
 
     public static void main(String[] args) {
         SpringApplication.run(ModularComputerConfiguratorApplication.class, args);
@@ -36,5 +41,23 @@ public class ModularComputerConfiguratorApplication implements CommandLineRunner
                 System.out.println();
             }
         }
+        simulate();
+        System.out.println(configurationService.countComponents());
+    }
+
+    @SneakyThrows
+    public void simulate() {
+        List<CompletableFuture<Void>> componentAdders = new ArrayList<>();
+
+        for (int i = 0; i < 100; i++) {
+            componentAdders.add(componentAdder.addComponent());
+            Thread.sleep(50);
+        }
+        CompletableFuture<Void> allTasks = CompletableFuture.allOf(
+                componentAdders.toArray(new CompletableFuture[0])
+        );
+        allTasks.join();
+
+        System.out.println("Все задачи завершены!");
     }
 }

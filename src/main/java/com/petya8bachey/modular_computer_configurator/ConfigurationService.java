@@ -1,17 +1,19 @@
 package com.petya8bachey.modular_computer_configurator;
 import jakarta.annotation.PostConstruct;
+import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Semaphore;
 
 @Service
 public class ConfigurationService {
-    private final ComponentRepository componentRepository;
-
-    public ConfigurationService(ComponentRepository componentRepository) {
-        this.componentRepository = componentRepository;
-    }
+    @Autowired
+    private ComponentRepository componentRepository;
 
     public List<List<Component>> generateConfigurations() {
         // Группируем компоненты по типу
@@ -128,5 +130,23 @@ public class ConfigurationService {
 
             System.out.println("Компоненты добавлены в базу данных.");
         }
+    }
+
+    @SneakyThrows
+    @Async
+    public CompletableFuture<Void> addComponent(Component component) {
+        simulateDelay();
+        componentRepository.save(component);
+        return CompletableFuture.completedFuture(null);
+    }
+
+
+    @SneakyThrows
+    public void simulateDelay() {
+        Thread.sleep(100);
+    }
+
+    public int countComponents() {
+        return (int) componentRepository.count();
     }
 }
