@@ -13,9 +13,6 @@ public class ModularComputerConfiguratorApplication implements CommandLineRunner
     @Autowired
     private ConfigurationService configurationService;
 
-    @Autowired
-    private ComponentRepository componentRepository;
-
     public static void main(String[] args) {
         SpringApplication.run(ModularComputerConfiguratorApplication.class, args);
     }
