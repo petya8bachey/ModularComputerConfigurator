@@ -1,4 +1,5 @@
 package com.petya8bachey.modular_computer_configurator;
+
 import jakarta.annotation.PostConstruct;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Semaphore;
 
@@ -14,6 +16,9 @@ import java.util.concurrent.Semaphore;
 public class ConfigurationService {
     @Autowired
     private ComponentRepository componentRepository;
+
+    @Autowired
+    private ComponentAddService componentAddService;
 
     public List<List<Component>> generateConfigurations() {
         // Группируем компоненты по типу
@@ -126,24 +131,25 @@ public class ConfigurationService {
             mb3.addCompatibility(CompatibilityType.PCIe_4_0);
             mb3.addCompatibility(CompatibilityType.DDR5);
 
-            componentRepository.saveAll(List.of(cpu1, cpu2, gpu1, gpu2, ram1, ram2, mb1, mb2, mb3));
+            for (Component component : List.of(cpu1, cpu2, gpu1, gpu2, ram1, ram2, mb1, mb2, mb3)) {
+                addComponentsToQueue(component);
+            }
 
             System.out.println("Компоненты добавлены в базу данных.");
         }
     }
 
-    @SneakyThrows
-    @Async
-    public CompletableFuture<Void> addComponent(Component component) {
+    public void addComponentsToQueue(Component component) {
         simulateDelay();
-        componentRepository.save(component);
-        return CompletableFuture.completedFuture(null);
+        CompletableFuture<Void> future = componentAddService.addComponent(component);
+        future.join();
     }
 
 
     @SneakyThrows
     public void simulateDelay() {
-        Thread.sleep(100);
+        Random random = new Random();
+        Thread.sleep(random.nextInt(100) + 100);
     }
 
     public int countComponents() {
